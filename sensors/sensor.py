@@ -2,9 +2,8 @@ import abc
 import json
 
 from azure.iot.device import Message
-from azure.iot.hub import IoTHubRegistryManager
 
-from constants import CONNECTION_STRING, MESSAGE_COUNT, MSG_TXT
+from constants import CONNECTION_STRING
 from azure.iot.device.aio import IoTHubDeviceClient
 
 class Sensor(abc.ABC):
