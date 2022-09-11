@@ -1,10 +1,13 @@
+import asyncio
+
 from sensors.ht11 import HT11
 
 
-def main():
+async def main():
     sensor = HT11()
-    temparature = sensor.generate()
+    await sensor.generate()
 
 
 if __name__ == "__main__":
-    main()
+    print("Gerando dados")
+    asyncio.run(main())
