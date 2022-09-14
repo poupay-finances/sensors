@@ -8,7 +8,7 @@ from azure.iot.device.aio import IoTHubDeviceClient
 
 class Sensor(abc.ABC):
     def __init__(self):
-        self.data = 0
+        self.data = {}
         self.device = IoTHubDeviceClient.create_from_connection_string(CONNECTION_STRING)
 
     @abc.abstractmethod
