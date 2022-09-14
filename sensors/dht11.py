@@ -16,7 +16,7 @@ class DHT11(Sensor):
     async def generate(self):
         print("Simulando dados de temperatura")
         base_temperature = self.get_random_number(20.5, 38.5)
-        base_humidity = self.get_random_number(30, 40)
+        base_humidity = self.get_random_number(30, 98)
         while True:
             error_register = np.random.choice([False, True], p=[0.9, 0.1])
             if error_register:
