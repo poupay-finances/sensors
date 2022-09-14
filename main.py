@@ -1,10 +1,10 @@
 import asyncio
 
-from sensors.ht11 import HT11
+from sensors.dht11 import DHT11
 
 
 async def main():
-    sensor = HT11()
+    sensor = DHT11()
     await sensor.generate()
 
 
