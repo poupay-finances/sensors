@@ -2,7 +2,6 @@ import abc
 import json
 
 from azure.iot.device import Message
-
 from constants import CONNECTION_STRING
 from azure.iot.device.aio import IoTHubDeviceClient
 
@@ -19,6 +18,7 @@ class Sensor(abc.ABC):
         try:
             # Create IoTHubRegistryManager
             message = Message(json.dumps(self.data))
+            print(f"Tamanho da mensagem: {message.get_size()} bytes")
             await self.device.send_message(message)
             print("Enviando mensagem para Nuvem")
         except Exception as ex:

@@ -10,6 +10,7 @@ class DHT11(Sensor):
     def __init__(self):
         super().__init__()
         self.temperature = 0
+        self.energy = 100.0
         self.humidity = 0
         self.date_register = datetime.now()
 
@@ -17,8 +18,8 @@ class DHT11(Sensor):
         print("Simulando dados de temperatura")
         base_temperature = self.get_random_number(20.5, 38.5)
         base_humidity = self.get_random_number(30, 98)
-        while True:
-            error_register = np.random.choice([False, True], p=[0.9, 0.1])
+        while self.energy > 0:
+            error_register = np.random.choice([False, True], p=[0.97, 0.03])
             if error_register:
                 self.set_data_error()
             else:
@@ -29,7 +30,10 @@ class DHT11(Sensor):
             print(f"{self.data.get('date_register')} - {self.data.get('temperature')} Cº - Umidade: "
                   f"{self.data.get('humidity')}%")
             await self.send_data()
-            await asyncio.sleep(1)
+            self.energy = 0.005
+            await asyncio.sleep(60)
+        self.energy = 0
+        print("Sensor descarregado!")
 
     def set_temperature(self, base_temperature):
         temperature = np.random.uniform(low=base_temperature - 2, high=base_temperature + 2)
@@ -44,6 +48,7 @@ class DHT11(Sensor):
 
     def set_data_success(self):
         self.data = {
+            "energy": round(self.energy, 3),
             "humidity": self.humidity,
             "temperature": self.temperature,
             "date_register": self.date_register.strftime('%m/%d/%Y %H:%M:%S'),
@@ -52,6 +57,7 @@ class DHT11(Sensor):
 
     def set_data_error(self):
         self.data = {
+            "energy": round(self.energy, 3),
             "humidity": None,
             "temperature": None,
             "date_register": self.date_register.strftime('%m/%d/%Y %H:%M:%S'),
