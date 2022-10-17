@@ -10,7 +10,7 @@ class DHT11(Sensor):
     def __init__(self):
         super().__init__()
         self.temperature = 0
-        self.energy = 100.0
+        self.energy = 0.005
         self.humidity = 0
         self.date_register = datetime.now()
 
@@ -28,11 +28,13 @@ class DHT11(Sensor):
                 self.update_date_register()
                 self.set_data_success()
             print(f"{self.data.get('date_register')} - {self.data.get('temperature')} Cº - Umidade: "
-                  f"{self.data.get('humidity')}%")
+                  f"{self.data.get('humidity')}% - Nível de bateria: {self.energy}%")
             await self.send_data()
-            self.energy = 0.005
-            await asyncio.sleep(60)
+            self.energy = self.energy - 0.005
+            await asyncio.sleep(1)
         self.energy = 0
+        self.set_data_when_energy_is_empty()
+        await self.send_data()
         print("Sensor descarregado!")
 
     def set_temperature(self, base_temperature):
@@ -62,6 +64,12 @@ class DHT11(Sensor):
             "temperature": None,
             "date_register": self.date_register.strftime('%m/%d/%Y %H:%M:%S'),
             "message_id": str(uuid.uuid4())
+        }
+        return self.data
+
+    def set_data_when_energy_is_empty(self):
+        self.data = {
+            "message": "Bateria baixa"
         }
         return self.data
 
